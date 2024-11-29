@@ -8,19 +8,21 @@ set PROTO_FILES_DIR=protocol
 set OUTPUT_DIR_C=embedded_c
 set OUTPUT_DIR_PYTHON=cloud_python
 
-REM Create the output directory if it doesn't exist
-if not exist %OUTPUT_DIR_C% (
-    mkdir %OUTPUT_DIR_C%
-)
+echo Initialize GIT submodules and install dependencies
+git submodule update --init --recursive
+pip install --upgrade protobuf grpcio-tools
 
-REM Generate the protobuf files for C
+echo Generating library ProtoBuf files for C
 for %%f in (%PROTO_FILES_DIR%\*.proto) do (
     python %NANOPB_PATH% -D %OUTPUT_DIR_C% %%f
 )
 
-REM Generate the protobuf files for python
+echo Configure and build C project
+cmake -B build -S . -G "MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake --build build
+
+echo Generate library ProtoBuf files for Python
 for %%f in (%PROTO_FILES_DIR%\*.proto) do (
+    echo Generating library ProtoBuf files for %%f
     %PROTOC_PATH% --python_out=%OUTPUT_DIR_PYTHON% %%f
 )
-
-echo Protobuf files generated successfully.
