@@ -1,1 +1,6 @@
+.vscode/
 /build
+
+*_pb2.py
+*.pb.c
+*.pb.h
