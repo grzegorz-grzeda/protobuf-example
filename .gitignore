@@ -1,5 +1,6 @@
 .vscode/
 /build
+env/
 
 *_pb2.py
 *.pb.c
