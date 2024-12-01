@@ -42,6 +42,4 @@ void connection_close(connection_t* connection);
 
 void connection_send(connection_t* connection, void* data, int size);
 
-void connection_receive(connection_t* connection, void* data, int size);
-
 #endif  // CONNECTION_H

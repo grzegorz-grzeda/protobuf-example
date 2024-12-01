@@ -21,44 +21,13 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#include "connection.h"
-#include <stdlib.h>
+#ifndef CONNECTION_PLATFORM_H
+#define CONNECTION_PLATFORM_H
 
-typedef struct connection {
-    const char* host;
-    int port;
-    connection_receive_callback_t callback;
-    int socket;
-    int is_open;
-} connection_t;
+typedef struct connection_platform connection_platform_t;
 
-connection_t* connection_create(const char* host,
-                                int port,
-                                connection_receive_callback_t callback) {
-    connection_t* connection = (connection_t*)calloc(1, sizeof(connection_t));
-    if (connection == NULL) {
-        return NULL;
-    }
-    connection->host = host;
-    connection->port = port;
-    connection->callback = callback;
-    connection->socket = -1;
-    connection->is_open = 0;
-    return connection;
-}
+connection_platform_t* connection_platform_create();
 
-void connection_destroy(connection_t* connection) {
-    if (connection == NULL) {
-        return;
-    }
-    if (connection->is_open) {
-        connection_close(connection);
-    }
-    free(connection);
-}
+void connection_platform_destroy(connection_platform_t* connection_platform);
 
-void connection_open(connection_t* connection) {}
-
-void connection_close(connection_t* connection) {}
-
-void connection_send(connection_t* connection, void* data, int size) {}
+#endif  // CONNECTION_PLATFORM_H
